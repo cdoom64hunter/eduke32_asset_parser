@@ -1,0 +1,16 @@
+# REFERENCE: Output format of dump_used_assets.m32
+Loaded V9 map <path>/<map> successfully
+Searching for tiles used in current map...
+sprite,<num>,
+floor,<num>,
+ceiling,<num>,
+wall,<num>,
+overwall,<num>,
+Tile search finished.
+Searching for sounds used in current map...
+MUSICANDSFX ambient,<num>,
+MUSICANDSFX triggered,<num>,
+switch,44,
+MIRROR,252,
+Sound search finished.
+Search finished.
