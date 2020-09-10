@@ -11,6 +11,7 @@ mkdir -p "./statistics"
 
 # find all name definitions
 grep -nwr "^\s*define" ${code_path} > "./statistics/defs.txt"
+grep -nwr "^\s*\(gamevar\|var\|gamearray\) [A-Za-z0-9_]\+" ${code_path} > "./statistics/vars.txt"
 
 # find all actor definitions
 grep -nwr "^\s*useractor" ${code_path} > "./statistics/useractor_instances.txt"
@@ -21,13 +22,13 @@ grep -nwr "\s*cactor\s\+[a-zA-Z0-9_]\+" ${code_path} > "./statistics/cactor_line
 
 # find all instances of spawning tiles
 grep -nwr "\s*spawn\s\+[a-zA-Z0-9_]\+" ${code_path} > "./statistics/spawn_instances.txt"
-grep -nwr "\s*spawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
+# grep -nwr "\s*spawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
 grep -nwr "\s*espawn\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/spawn_instances.txt"
-grep -nwr "\s*espawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/spawn_instances.txt"
+# grep -nwr "\s*espawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/spawn_instances.txt"
 grep -nwr "\s*qspawn\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
-grep -nwr "\s*qspawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
+# grep -nwr "\s*qspawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
 grep -nwr "\s*eqspawn\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
-grep -nwr "\s*eqspawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
+# grep -nwr "\s*eqspawnvar\s\+[a-zA-Z0-9_]\+" ${code_path} >> "./statistics/espawn_instances.txt"
 
 # find all projectile definitions
 grep -nwr "\s*defineprojectile\s\+[a-zA-Z0-9_]\+" ${code_path} > "./statistics/projectile_instances.txt"
