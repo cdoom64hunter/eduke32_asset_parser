@@ -1,0 +1,5 @@
+
+This folder is where you can put additional pkl files containing numpy arrays.
+
+These arrays are intended for filtering purposes and will be added to the statistics tables for each map.
+Note that the size of each array needs to match maxtiles.
