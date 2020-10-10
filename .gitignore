@@ -1,4 +1,5 @@
 .idea
+untracked/
 
 # Outputs
 csv_out/*
