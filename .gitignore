@@ -1,1 +1,7 @@
 .idea
+
+# Outputs
+csv_out/*
+*.xlsx
+databases/*.sqlite
+*_reject.txt
