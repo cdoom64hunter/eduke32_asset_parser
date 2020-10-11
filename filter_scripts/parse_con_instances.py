@@ -23,11 +23,11 @@ import os
 import numpy as np
 import pickle
 
-
+MAXTILES=-1
 if len(sys.argv) >= 2:
     MAXTILES = int(sys.argv[1])
 else:
-    print("Must specify maxtiles!", file=sys.stderr)
+    print("Must specify maxtiles a first argument!", file=sys.stderr)
     exit(1)
 
 defined_names = dict()

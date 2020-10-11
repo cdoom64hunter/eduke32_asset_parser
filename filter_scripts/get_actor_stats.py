@@ -17,16 +17,17 @@ import pickle
 CODE_DIR:str = ""
 MAXTILES:int = -1
 
+
 if len(sys.argv) >= 2:
-    MAXTILES = int(sys.argv[1])
+    CODE_DIR = sys.argv[1]
 else:
-    print("Must specify maxtiles!", file=sys.stderr)
+    print("Must specify code directory as first argument!", file=sys.stderr)
     exit(1)
 
 if len(sys.argv) >= 3:
-    CODE_DIR = sys.argv[2]
+    MAXTILES = int(sys.argv[2])
 else:
-    print("Must specify code directory!", file=sys.stderr)
+    print("Must specify maxtiles as second argument (int)!", file=sys.stderr)
     exit(2)
 
 

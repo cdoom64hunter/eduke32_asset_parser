@@ -12,7 +12,7 @@ CREATE TABLE <REPLACE_MAPNAME>_tiles (
     -- spawned BIT,         -- whether the tile was spawned by a CON script
     -- actor BIT,           -- whether the tile is part of an actor
     -- hardcoded BIT,       -- whether the tile is used in the engine
-    -- empty BIT,           -- whether the tile is empty
+    -- nonempty BIT,        -- whether the tile index has an associated texture
     -- projectile BIT,      -- whether the tile is a projectile
     -- animation BIT,       -- whether the tile is part of an animation
     -- screentile BIT,      -- whether the tile is used as part of the HUD
