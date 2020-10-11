@@ -2,14 +2,18 @@
 # Author: Dino Bollinger
 # Licensed under BSD 3-Clause License, see included LICENSE file
 """
+names_parser.py <maxtiles>
 Parses names.h and namesdyn.h of the Duke3D source and finds all actual usages of the contained tile definitions.
-This is output as individual csv files, and as combined report. Individual usage lines are also reported.
+This is output as a pickled numpy arrays and as individual csv files. Individual usage lines are also reported.
 The resulting output is a csv with markers for which tiles have hardcoded behavior, and which do not. (1/0)
 Usage: namesh_parser.py
 """
 import sys
 import os
 import subprocess
+import pickle
+
+import numpy as np
 
 # Output directory for all reports
 output_dir = "./namesh_report"
@@ -17,7 +21,14 @@ output_dir = "./namesh_report"
 tilenum_to_hardc = dict()
 tilenum_to_name = dict()
 
-def dump_name_stats(infile:str, outfile:str, outfile_second:str) -> None:
+def dump_name_stats(infile:str, outfile:str, outfile_second:str, data_array: np.ndarray) -> None:
+    """
+    Dumps usage stats to the filesystem and returns a nump
+    :param infile:
+    :param outfile:
+    :param outfile_second:
+    :return:
+    """
     usages_writer = open(outfile_second, 'w')
     report_writer = open(outfile, "w")
     report_writer.write("used, name, tilenum\n")
@@ -52,14 +63,21 @@ def dump_name_stats(infile:str, outfile:str, outfile_second:str) -> None:
                     for sl in sanitized_lines:
                         usages_writer.write(sl + "\n")
                     report_writer.write(f"1, {name}, {number}\n")
+                    data_array[int(number)] = 2
                 else:
                     report_writer.write(f"0, {name}, {number}\n")
+                    if not data_array[int(number)] > 1: data_array[int(number)] = 1
     usages_writer.close()
     report_writer.close()
 
 
 
 def read_dump(fd):
+    """
+    Read previously created dump.
+    :param fd:
+    :return:
+    """
     headers = fd.readline()
     if headers.strip() != "used, name, tilenum":
         return 1
@@ -79,6 +97,12 @@ def read_dump(fd):
 
 def main() -> int:
 
+    if len(sys.argv) < 2:
+        print("Must specify maxtiles!", file=sys.stderr)
+        sys.exit(1)
+
+    maxtiles = int(sys.argv[1])
+    data_array = np.zeros(maxtiles)
     os.makedirs(output_dir, exist_ok=True)
 
     infile = "./source/duke3d/src/names.h"
@@ -90,7 +114,7 @@ def main() -> int:
     nh_outfile = os.path.join(output_dir, "names_report.csv")
     nh_outfile_second = os.path.join(output_dir, "names_usages.txt")
 
-    dump_name_stats(infile, nh_outfile, nh_outfile_second)
+    dump_name_stats(infile, nh_outfile, nh_outfile_second, data_array=data_array)
 
     infile = "./source/duke3d/src/namesdyn.h"
     if not os.path.exists(infile):
@@ -101,7 +125,7 @@ def main() -> int:
     nd_outfile = os.path.join(output_dir, "namesdyn_report.csv")
     nd_outfile_second = os.path.join(output_dir, "namesdyn_usages.txt")
 
-    dump_name_stats(infile, nd_outfile, nd_outfile_second)
+    dump_name_stats(infile, nd_outfile, nd_outfile_second, data_array=data_array)
 
     # Read dump to fill dicts
     with open(nh_outfile, 'r') as fr:
@@ -123,8 +147,14 @@ def main() -> int:
             used = tilenum_to_hardc[tile_num]
             names = tilenum_to_name[tile_num]
             fd.write(f"{tile_num}, {used}, {'::'.join(names)}\n")
-
     print(f"Combined report written to {cb}")
+
+    #output data array of size maxtiles as a pickle file
+    pkl_path = os.path.join(output_dir, "hardcoded.pkl")
+    with open(pkl_path, 'wb') as fd:
+        pickle.dump(data_array, fd, pickle.HIGHEST_PROTOCOL)
+    print(f"Pickled filter array written to {pkl_path}")
+
     return 0
 
 if __name__ == "__main__":

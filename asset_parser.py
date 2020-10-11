@@ -35,7 +35,7 @@ TILE_SCHEMA = "./databases/tiles.sql"
 SOUND_SCHEMA = "./databases/sounds.sql"
 DBPATH = "./databases/asset_stats.sqlite"
 
-__version__ = "2.0"
+__version__ = "2.01"
 
 # Indicates the start of a map in the log. Comes in several variations depending on version and corruption.
 mapload_pattern = re.compile("Loaded V[0-9]+ map (.*) (successfully|\(EXTREME corruption\)|\(HEAVY corruption\)|\(moderate corruption\)|\(removed [0-9]+ sprites\)).*")
@@ -56,14 +56,14 @@ class MapStatsParser:
 
         # expected: paths to pickle files
         self.extra_tilestats: Dict[str, np.ndarray] = dict()
-        for k, v in kwargs: ## path to additional files
+        for k, v in kwargs.items(): ## path to additional files
             print(f"Using extra stats file: {v}")
-            with open(v, 'r') as fd:
+            with open(v, 'rb') as fd:
                 loaded_arr = pickle.load(fd)
                 if type(loaded_arr) != np.ndarray:
-                    raise ValueError("Error: extra stats pickle file does not contain a valid ndarray!")
+                    raise ValueError(f"Extra stats file '{v}' does not contain a valid ndarray!")
                 elif loaded_arr.shape != (maxtiles,):
-                    raise ValueError(f"Error: extra stats array size is {loaded_arr.shape}, but maxtiles is {maxtiles}!")
+                    raise ValueError(f"Size of extra stats array '{v}' is '{loaded_arr.shape}', but maxtiles specified as '{maxtiles}'!")
                 self.extra_tilestats[k] = loaded_arr
 
 
@@ -319,7 +319,7 @@ class MapStatsParser:
                 col_name = re.sub("\s", "_", col)
                 if col_name not in tiles_known_columns:
                     tiles_known_columns.add(col_name)
-                    add_col_command = f"ALTER TABLE {cleaned_mapname}_tiles ADD {col_name} INTEGER"
+                    add_col_command = f"ALTER TABLE {cleaned_mapname}_tiles ADD {col_name} BINARY"
                     self.stats_db.execute(add_col_command)
                 command_string += f",{col_name}"
                 value_string += ",?"
@@ -458,7 +458,7 @@ def main():
     print("Extra stats usage enabled.")
     if cargs["--use_extra_stats"]:
         files = os.listdir("./extra_input")
-        extras = {f[0:-4]: f for f in files if f.endswith(".pkl")}
+        extras = {f[0:-4]: os.path.join("extra_input", f) for f in files if f.endswith(".pkl")}
     else:
         extras = dict()
 
