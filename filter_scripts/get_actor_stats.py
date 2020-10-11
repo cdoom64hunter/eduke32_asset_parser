@@ -32,7 +32,7 @@ else:
 
 
 actor_frame_array = np.zeros(MAXTILES)
-outfile = "./actor_frame_array.pkl"
+outfile = "./actor_frame.pkl"
 
 action_defs = dict()
 ai_defs = dict()

@@ -35,7 +35,7 @@ TILE_SCHEMA = "./databases/tiles.sql"
 SOUND_SCHEMA = "./databases/sounds.sql"
 DBPATH = "./databases/asset_stats.sqlite"
 
-__version__ = "2.01"
+__version__ = "2.1"
 
 # Indicates the start of a map in the log. Comes in several variations depending on version and corruption.
 mapload_pattern = re.compile("Loaded V[0-9]+ map (.*) (successfully|\(EXTREME corruption\)|\(HEAVY corruption\)|\(moderate corruption\)|\(removed [0-9]+ sprites\)).*")
@@ -302,6 +302,9 @@ class MapStatsParser:
             tiles_known_columns = {"id", "sprite", "wall", "ceiling", "floor", "overwall", "total"}
             cleaned_mapname = map_ext_pattern.sub('', mapname)
             cleaned_mapname = re.sub('.*/', '', cleaned_mapname)
+            cleaned_mapname = re.sub('-', '_', cleaned_mapname)
+            if re.match("[0-9]", cleaned_mapname[0]):
+                cleaned_mapname = "m" + cleaned_mapname
             self.db_setup_table(TILE_SCHEMA, cleaned_mapname)
 
             cols = []
@@ -342,6 +345,9 @@ class MapStatsParser:
             sounds_known_columns = {"id", "total"}
             cleaned_mapname = map_ext_pattern.sub('', mapname)
             cleaned_mapname = re.sub('.*/', '', cleaned_mapname)
+            cleaned_mapname = re.sub('-', '_', cleaned_mapname)
+            if re.match("[0-9]", cleaned_mapname[0]):
+                cleaned_mapname = "m" + cleaned_mapname
             self.db_setup_table(SOUND_SCHEMA, cleaned_mapname)
 
             cols = []
@@ -352,6 +358,9 @@ class MapStatsParser:
             col:str
             for col, v in stats.items():
                 col_name = re.sub("\s", "_", col)
+                col_name = re.sub('-', '_', col_name)
+                if re.match("[0-9]", col_name[0]):
+                    col_name = "m" + col_name
                 if col_name not in sounds_known_columns:
                     sounds_known_columns.add(col_name)
                     add_col_command = f"ALTER TABLE {cleaned_mapname}_sounds ADD {col_name} INTEGER"

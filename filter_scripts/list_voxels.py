@@ -32,7 +32,7 @@ voxel_tiles = np.zeros(MAXTILES)
 with open(DEF_DIR, "r") as fd:
     for line in fd:
         if line.startswith("voxel"):
-            match = re.match("\{.*\s*tile\s*([0-9])\s*.*}")
+            match = re.search("\\{.*\\s*tile\\s*([0-9]*)\\s*.*}", line)
             tilenum = int(match.group(1))
             voxel_tiles[tilenum] = 1
 

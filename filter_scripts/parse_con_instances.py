@@ -291,10 +291,10 @@ def main():
     os.makedirs("./pickled_stats/", exist_ok=True)
 
     # dump the collected stats into pickled numpy arrays on disk
-    outfile1 = "./pickled_stats/actor_tile_array.pkl"
-    outfile2 = "./pickled_stats/spawned_tile_array.pkl"
-    outfile3 = "./pickled_stats/projectiles_array.pkl"
-    outfile4 = "./pickled_stats/screen_tiles.pkl"
+    outfile1 = "./pickled_stats/actor.pkl"
+    outfile2 = "./pickled_stats/spawned.pkl"
+    outfile3 = "./pickled_stats/projectile.pkl"
+    outfile4 = "./pickled_stats/screentile.pkl"
 
     print(f"Number of distinct actor tiles: {np.count_nonzero(actor_tiles)}")
     with open(outfile1, "wb") as fd:
@@ -309,12 +309,12 @@ def main():
     print(f"Number of projectiles: {np.count_nonzero(projectiles)}")
     with open(outfile3, "wb") as fd:
         pickle.dump(projectiles, fd, pickle.HIGHEST_PROTOCOL)
-        print(f"Spawned tile array written to: '{outfile3}'")
+        print(f"Projectile array written to: '{outfile3}'")
 
     print(f"Number of screen tiles: {np.count_nonzero(screen_tiles)}")
     with open(outfile4, "wb") as fd:
         pickle.dump(screen_tiles, fd, pickle.HIGHEST_PROTOCOL)
-        print(f"Spawned tile array written to: '{outfile4}'")
+        print(f"Screen tile array written to: '{outfile4}'")
 
     return 0
 

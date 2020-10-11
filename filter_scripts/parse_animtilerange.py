@@ -5,11 +5,13 @@
   To make use of this script, it is recommended to utilize
   mapster32 and BAFed to construct a DEF file containing all animtileranges.
 
-  This is done by first dumping a single ART file containing all tiles using mapster32,
-  and then using BAFed to dump a DEF file for all tiles. This script then parses the
-  contents of the DEF file structure, to report animtile ranges, and non-empty tile slots.
+  This is done by first dumping a single ART file containing all tiles using mapster32
+  with the `artdump` console command, and then using BAFed to dump a DEF file for all tiles.
+  This script then parses the contents of the DEF file structure,
+  to report animtile ranges, and non-empty tile slots.
 
   It can also be used to determine which tiles are used as tilefromtexture normally.
+  Results are dumped as pickled numpy arrays.
   """
 
 import sys
@@ -50,7 +52,7 @@ with open(DEF_DIR, "r") as fd:
             animtiles[start:end] = 1
 
 outfile1 = "nonempty.pkl"
-outfile2 = "animated.pkl"
+outfile2 = "animation.pkl"
 
 print(f"Number of nonempty tiles: {np.count_nonzero(nonempty_tiles)}")
 with open(outfile1, "wb") as fd:
