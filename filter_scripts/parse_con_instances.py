@@ -1,3 +1,6 @@
+#!/bin/python3
+# Author: Dino Bollinger
+# Licensed under BSD 3-Clause License, see included LICENSE file
 """
 Parse extracted CON command instances to retrieve indicator arrays for use in filtering Duke3D tiles.
 This is a static analysis script and hence make use of the values stored in gamevars. Only constants and names are counted, the rest is filtered.
@@ -24,7 +27,8 @@ import pickle
 if len(sys.argv) >= 2:
     MAXTILES = int(sys.argv[1])
 else:
-    MAXTILES = 8192
+    print("Must specify maxtiles!", file=sys.stderr)
+    exit(1)
 
 defined_names = dict()
 defined_vars = set()
